@@ -22,6 +22,7 @@ namespace study_cards_api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Stack stack)
         {
+            //Looks like I'll probably want to create a card and then add it to a stack in the same call. Interesting
             _context.Stacks.Add(stack);
             _context.SaveChanges();
             return Created("URI of the created entity", stack);
