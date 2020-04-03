@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 const axios = require('axios').default;
 
 class Stack extends React.Component {
@@ -8,22 +9,32 @@ class Stack extends React.Component {
     super(props);
     this.state = {
       isActive: this.props.isActive,
-      name: this.props.name //I think this is right
+      name: this.props.name,
+      cards: this.props.cards,
+      cardsArray: this.props.cards.length //I don't think I need this
     }
   }
 
   renderCards(i) {
-    return (
-      <Card word = "sampleword" definition = "sampledefinition" stack = {this.props.name} />
+    return ( //Can I do a for loop or something that goes through the whole cards JSON and grabs all of them?
+      <div>
+        <h2>Current Stack: {this.state.name}</h2>
+        <Card word = {this.state.cards[0]['cards'][0]['word']} definition = {this.state.cards[0]['cards'][0]['definition']} />
+        <Card word = {this.state.cards[0]['cards'][1]['word']} definition = {this.state.cards[0]['cards'][1]['definition']} />
+        <Card word = {this.state.cards[0]['cards'][2]['word']} definition = {this.state.cards[0]['cards'][2]['definition']} />
+      </div>
+
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
       //How can I make sure I'm only getting the cards that are in the collection, not all of them?
       //Maybe something with LINQ (doesn't exist in js)???
     )
   }
 
-  render(i) {
+  render(i = 0) {
     return (
       this.renderCards(i)
+      //I think this is more of what I want. I think I only want one card on the screen at a time
+      //That way I can have an onClick or something that loads the next one. Need to increment i somehow
     )
   }
 }
@@ -40,17 +51,14 @@ class Card extends React.Component {
 
   render() {
     return (
-      <table>
+        <table>
         <thead>
           <tr>
             <th>
-              This
+              Word
             </th>
             <th>
-              This
-            </th>
-            <th>
-              This
+              Definition
             </th>
           </tr>
         </thead>
@@ -61,9 +69,6 @@ class Card extends React.Component {
             </td>
             <td>
               {this.props.definition}
-            </td>
-            <td>
-              {this.props.stack}
             </td>
           </tr>
         </tbody>
@@ -93,7 +98,8 @@ function App() { //Probably something in here that iterates to load all the coll
       <div>
         <Stack
         isActive = {true}
-        name = {"Name"}
+        name = {cards[0]['title']}
+        cards = {cards} //I want to only pass the cards where the title matches or something, but this works for now
           />
       </div>
     );
