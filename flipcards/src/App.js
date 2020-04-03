@@ -12,12 +12,18 @@ class Stack extends React.Component {
     }
   }
 
-  render() {
+  renderCards(i) {
     return (
-      <div>
-        this.isActive,
-        this.name
-      </div>
+      <Card word = {this.props.word} definition = {this.props.definition} />
+      //Seems like I'll need some code to sort through the JSON to get the right information for each card
+      //How can I make sure I'm only getting the cards that are in the collection, not all of them?
+      //Maybe something with LINQ (doesn't exist in js)???
+    )
+  }
+
+  render(i) {
+    return (
+      this.renderCards(i)
     )
   }
 }
@@ -26,19 +32,42 @@ class Card extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      word: this.props.word,
-      definition: this.props.definition,
-      stack: this.props.stack
+      word: null,
+      definition: null,
+      stack: null
     }
   }
 
   render() {
     return (
-      <div>
-        {this.props.word}
-        {this.props.definition}
-        {this.stack}
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              This
+            </th>
+            <th>
+              This
+            </th>
+            <th>
+              This
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              {this.props.word}
+            </td>
+            <td>
+              {this.props.definition}
+            </td>
+            <td>
+              {this.props.stack}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     )
   }
 }
@@ -57,20 +86,15 @@ function getCardInfo() {
   return cards;
 }
 
-
-function App() {
+function App() { //Probably something in here that iterates to load all the collections in the JSON?
   var cards = getCardInfo();
-  cards = JSON.stringify(cards);
+  cards = JSON.parse(cards);
     return (
       <div>
-        <Card
-          word = {'Good'}
-          definition = {"This is a sample word"}
+        <Stack //Iterate to make all the stacks. And pass cards from JSON into the stacks?
           />
       </div>
     );
 }
-
-
 
 export default App;
