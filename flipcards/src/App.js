@@ -7,14 +7,14 @@ class Stack extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActive: false,
+      isActive: this.props.isActive,
       name: this.props.name //I think this is right
     }
   }
 
   renderCards(i) {
     return (
-      <Card word = {this.props.word} definition = {this.props.definition} />
+      <Card word = "sampleword" definition = "sampledefinition" stack = {this.props.name} />
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
       //How can I make sure I'm only getting the cards that are in the collection, not all of them?
       //Maybe something with LINQ (doesn't exist in js)???
@@ -91,7 +91,9 @@ function App() { //Probably something in here that iterates to load all the coll
   cards = JSON.parse(cards);
     return (
       <div>
-        <Stack //Iterate to make all the stacks. And pass cards from JSON into the stacks?
+        <Stack
+        isActive = {true}
+        name = {"Name"}
           />
       </div>
     );
