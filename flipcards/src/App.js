@@ -1,6 +1,47 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 const axios = require('axios').default;
+
+class Stack extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isActive: false,
+      name: this.props.name //I think this is right
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        this.isActive,
+        this.name
+      </div>
+    )
+  }
+}
+
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      word: this.props.word,
+      definition: this.props.definition,
+      stack: this.props.stack
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        {this.props.word}
+        {this.props.definition}
+        {this.stack}
+      </div>
+    )
+  }
+}
 
 function getCardInfo() {
   var cards;
@@ -19,8 +60,14 @@ function getCardInfo() {
 
 function App() {
   var cards = getCardInfo();
+  cards = JSON.stringify(cards);
     return (
-      cards
+      <div>
+        <Card
+          word = {'Good'}
+          definition = {"This is a sample word"}
+          />
+      </div>
     );
 }
 

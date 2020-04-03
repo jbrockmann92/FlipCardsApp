@@ -18,6 +18,6 @@ namespace study_cards_api.Models
 
         [ForeignKey(nameof(Stack))]
         public int StackId { get; set; }
-        public Stack Stack { get; set; }
+        public Stack Stack { get; set; } //Seems like it might be better for the js code to have them the other way around
     }
 }
