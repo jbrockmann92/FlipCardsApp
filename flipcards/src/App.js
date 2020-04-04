@@ -14,20 +14,21 @@ class Stack extends React.Component {
     }
   }
 
-  
+  //Want to make sure I'm only loading one card at a time, then onClick, loading the next one after it's shown the definition
 
   renderCards(i) {
     var cards = [];
     for (var i = 0; i < this.props.cards.length; i++){
       cards.push(
         <div>
-          <Card word = {this.state.cards[i]['word']} definition = {this.state.cards[i]['definition']} />
+          <Card word = {this.state.cards[i]['word']} definition = {this.state.cards[i]['definition']} cardNumber = {i + 1} />
         </div>
       )
     }
     return ( //Need to do something that allows the user to click on the cards and changes the value to the definition
       <center>
           <h2>Current Stack: {this.state.name}</h2>
+          <h4>Total Cards in Stack: {this.state.cards.length}</h4>
           {cards}
         </center>
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
@@ -55,6 +56,7 @@ class Card extends React.Component {
       title: "Word",
       stack: null,
       isFlipped: false,
+      cardNumber: 0
     }
   }
 
@@ -64,6 +66,7 @@ class Card extends React.Component {
       definition: this.props.definition,
       currentValue: this.props.word,
       isFlipped: this.props.isFlipped,
+      cardNumber: this.props.cardNumber,
     })
   }
 
@@ -87,6 +90,11 @@ class Card extends React.Component {
             </tr>
           </thead>
           <tbody>
+            <tr>
+            <th>
+                Card Number: {this.state.cardNumber}
+              </th>
+            </tr>
             <tr>
               <td>
                 {this.state.currentValue}
