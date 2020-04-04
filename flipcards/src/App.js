@@ -71,11 +71,20 @@ class Card extends React.Component {
   }
 
   changeValue = () => {
-    this.setState({
-      currentValue: this.state.definition,
-      title: "Definition",
-      isFlipped: true,
-    })
+      if (!this.state.isFlipped){
+        this.setState({
+          currentValue: this.state.definition,
+          title: "Definition",
+          isFlipped: !this.state.isFlipped,
+        })
+      }
+      else {
+        this.setState({
+          currentValue: this.state.word,
+          title: "Word",
+          isFlipped: !this.state.isFlipped,
+        })
+      }
   }
 
   render() {
