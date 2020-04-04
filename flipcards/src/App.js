@@ -11,17 +11,17 @@ class Stack extends React.Component {
       isActive: this.props.isActive,
       name: this.props.name,
       cards: this.props.cards,
-      cardsArray: this.props.cards.length //I don't think I need this
     }
   }
 
+
   renderCards(i) {
-    return ( //Can I do a for loop or something that goes through the whole cards JSON and grabs all of them?
+    return ( //Need to do something that allows the user to click on the cards and changes the value to the definition
       <div>
-        <h2>Current Stack: {this.state.name}</h2>
+        <center>
+          <h2>Current Stack: {this.state.name}</h2>
+        </center>
         <Card word = {this.state.cards[0]['cards'][0]['word']} definition = {this.state.cards[0]['cards'][0]['definition']} />
-        <Card word = {this.state.cards[0]['cards'][1]['word']} definition = {this.state.cards[0]['cards'][1]['definition']} />
-        <Card word = {this.state.cards[0]['cards'][2]['word']} definition = {this.state.cards[0]['cards'][2]['definition']} />
       </div>
 
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
@@ -45,34 +45,47 @@ class Card extends React.Component {
     this.state = {
       word: null,
       definition: null,
-      stack: null
+      currentValue: null,
+      stack: null,
+      isFlipped: false,
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      word: this.props.word,
+      definition: this.props.definition,
+      currentValue: this.props.word,
+      isFlipped: this.props.isFlipped,
+    })
+  }
+
+  changeValue = () => {
+    this.setState({
+      currentValue: this.state.definition,
+    })
   }
 
   render() {
     return (
+      <button onClick={this.changeValue}>
         <table>
-        <thead>
-          <tr>
-            <th>
-              Word
-            </th>
-            <th>
-              Definition
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              {this.props.word}
-            </td>
-            <td>
-              {this.props.definition}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <thead>
+            <tr>
+              <th>
+                Word
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {this.state.currentValue}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </button>
     )
   }
 }
