@@ -14,6 +14,7 @@ class Stack extends React.Component {
     }
   }
 
+  
 
   renderCards(i) {
     return ( //Need to do something that allows the user to click on the cards and changes the value to the definition
@@ -21,7 +22,7 @@ class Stack extends React.Component {
         <center>
           <h2>Current Stack: {this.state.name}</h2>
         </center>
-        <Card word = {this.state.cards[0]['cards'][0]['word']} definition = {this.state.cards[0]['cards'][0]['definition']} />
+        <Card word = {this.state.cards[0]['word']} definition = {this.state.cards[0]['definition']} />
       </div>
 
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
@@ -46,6 +47,7 @@ class Card extends React.Component {
       word: null,
       definition: null,
       currentValue: null,
+      title: "Word",
       stack: null,
       isFlipped: false,
     }
@@ -63,6 +65,8 @@ class Card extends React.Component {
   changeValue = () => {
     this.setState({
       currentValue: this.state.definition,
+      title: "Definition",
+      isFlipped: true,
     })
   }
 
@@ -73,7 +77,7 @@ class Card extends React.Component {
           <thead>
             <tr>
               <th>
-                Word
+                {this.state.title}
               </th>
             </tr>
           </thead>
@@ -107,15 +111,16 @@ function getCardInfo() {
 function App() { //Probably something in here that iterates to load all the collections in the JSON?
   var cards = getCardInfo();
   cards = JSON.parse(cards);
-    return (
-      <div>
-        <Stack
-        isActive = {true}
-        name = {cards[0]['title']}
-        cards = {cards} //I want to only pass the cards where the title matches or something, but this works for now
-          />
-      </div>
-    );
+  var rows = [];
+  for (var i = 0; i < cards.length; i++) {
+      // note: we add a key prop here to allow react to uniquely identify each
+      // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
+      rows.push(<Stack 
+        name = {cards[i]['title']} 
+        cards = {cards[i]['cards']}  
+        />);
+  }
+  return <tbody>{rows}</tbody>;
 }
 
 export default App;
