@@ -17,14 +17,19 @@ class Stack extends React.Component {
   
 
   renderCards(i) {
+    var cards = [];
+    for (var i = 0; i < this.props.cards.length; i++){
+      cards.push(
+        <div>
+          <Card word = {this.state.cards[i]['word']} definition = {this.state.cards[i]['definition']} />
+        </div>
+      )
+    }
     return ( //Need to do something that allows the user to click on the cards and changes the value to the definition
-      <div>
-        <center>
+      <center>
           <h2>Current Stack: {this.state.name}</h2>
+          {cards}
         </center>
-        <Card word = {this.state.cards[0]['word']} definition = {this.state.cards[0]['definition']} />
-      </div>
-
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
       //How can I make sure I'm only getting the cards that are in the collection, not all of them?
       //Maybe something with LINQ (doesn't exist in js)???
@@ -111,16 +116,16 @@ function getCardInfo() {
 function App() { //Probably something in here that iterates to load all the collections in the JSON?
   var cards = getCardInfo();
   cards = JSON.parse(cards);
-  var rows = [];
+  var stacks = [];
   for (var i = 0; i < cards.length; i++) {
       // note: we add a key prop here to allow react to uniquely identify each
       // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-      rows.push(<Stack 
+      stacks.push(<Stack 
         name = {cards[i]['title']} 
         cards = {cards[i]['cards']}  
         />);
   }
-  return <tbody>{rows}</tbody>;
+  return <tbody>{stacks}</tbody>;
 }
 
 export default App;
