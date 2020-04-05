@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 const axios = require('axios').default;
@@ -13,8 +12,6 @@ class Stack extends React.Component {
       cards: this.props.cards,
     }
   }
-
-  //Want to make sure I'm only loading one card at a time, then onClick, loading the next one after it's shown the definition
 
   renderCards(i) {
     var cards = [];
@@ -30,7 +27,13 @@ class Stack extends React.Component {
           <h2>Current Stack: {this.state.name}</h2>
           <h4>Total Cards in Stack: {this.state.cards.length}</h4>
           {cards}
-        </center>
+          <button>
+            Next Card
+          </button>
+          <button>
+            Previous Card
+          </button>
+      </center>
       //Seems like I'll need some code to sort through the JSON to get the right information for each card
       //How can I make sure I'm only getting the cards that are in the collection, not all of them?
       //Maybe something with LINQ (doesn't exist in js)???
@@ -38,11 +41,21 @@ class Stack extends React.Component {
   }
 
   render(i = 0) {
-    return (
-      this.renderCards(i)
-      //I think this is more of what I want. I think I only want one card on the screen at a time
-      //That way I can have an onClick or something that loads the next one. Need to increment i somehow
-    )
+    if (this.state.cards !== undefined){
+      return (
+        this.renderCards(i)
+      )
+    }
+    else {
+      return (<div>
+      <h2>
+        {this.state.name}
+      </h2>
+        {this.state.cards}
+      </div>)
+    }
+      //I only want to render one card at a time, and have a button that increments or decrements {i} I think
+      //Something with componentDidUpdate()?
   }
 }
 
@@ -100,14 +113,14 @@ class Card extends React.Component {
           </thead>
           <tbody>
             <tr>
-            <th>
-                Card Number: {this.state.cardNumber}
-              </th>
-            </tr>
-            <tr>
               <td>
                 {this.state.currentValue}
               </td>
+            </tr>
+            <tr>
+            <td>
+              Card Number: {this.state.cardNumber}
+            </td>
             </tr>
           </tbody>
         </table>
@@ -130,17 +143,25 @@ function getCardInfo() {
   return cards;
 }
 
-function App() { //Probably something in here that iterates to load all the collections in the JSON?
+//Function that will load the cards in a stack when it's clicked?
+function populateCards(i, cards) {
+  return (
+    cards[i - 1]['cards']
+  )
+}
+
+function App() {
   var cards = getCardInfo();
   cards = JSON.parse(cards);
   var stacks = [];
+  var updatedCards;
   for (var i = 0; i < cards.length; i++) {
-      // note: we add a key prop here to allow react to uniquely identify each
-      // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-      stacks.push(<Stack 
+      stacks.push(<button onClick={() => updatedCards = populateCards(i, cards)}>
+        <Stack 
         name = {cards[i]['title']} 
-        cards = {cards[i]['cards']}  
-        />);
+        cards = {cards[i]['cards']}
+        />
+      </button>);
   }
   return <tbody>{stacks}</tbody>;
 }
