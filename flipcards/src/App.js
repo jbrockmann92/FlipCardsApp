@@ -10,40 +10,38 @@ class Stack extends React.Component {
       isActive: this.props.isActive,
       name: this.props.name,
       cards: this.props.cards,
+      currentCard: this.props.currentCard,
     }
   }
 
   renderCards(i) {
     var cards = [];
-    for (var i = 0; i < this.props.cards.length; i++){
+    for (var j = 0; j < this.props.cards.length; j++) {
       cards.push(
         <div>
-          <Card word = {this.state.cards[i]['word']} definition = {this.state.cards[i]['definition']} cardNumber = {i + 1} />
+          <Card word = {this.state.cards[j]['word']} definition = {this.state.cards[j]['definition']} cardNumber = {j + 1} />
         </div>
       )
     }
-    return ( //Need to do something that allows the user to click on the cards and changes the value to the definition
+
+    return (
       <center>
-          <h2>Current Stack: {this.state.name}</h2>
-          <h4>Total Cards in Stack: {this.state.cards.length}</h4>
-          {cards}
-          <button>
-            Next Card
-          </button>
-          <button>
-            Previous Card
-          </button>
+        <h2>Current Stack: {this.state.name}</h2>
+        <h4>Total Cards in Stack: {this.state.cards.length}</h4>
+        {cards[i]}
       </center>
-      //Seems like I'll need some code to sort through the JSON to get the right information for each card
-      //How can I make sure I'm only getting the cards that are in the collection, not all of them?
-      //Maybe something with LINQ (doesn't exist in js)???
     )
   }
 
-  render(i = 0) {
+  render(i) {
+    if (i === undefined) {
+      i = 0;
+    }
     if (this.state.cards !== undefined){
       return (
-        this.renderCards(i)
+        <div>
+          {this.renderCards(i)}
+        </div>
       )
     }
     else {
@@ -83,7 +81,7 @@ class Card extends React.Component {
     })
   }
 
-  changeValue = () => {
+    flipCard = () => {
       if (!this.state.isFlipped){
         this.setState({
           currentValue: this.state.definition,
@@ -102,7 +100,7 @@ class Card extends React.Component {
 
   render() {
     return (
-      <button onClick={this.changeValue}>
+      <button onClick={this.flipCard}>
         <table>
           <thead>
             <tr>
@@ -143,25 +141,18 @@ function getCardInfo() {
   return cards;
 }
 
-//Function that will load the cards in a stack when it's clicked?
-function populateCards(i, cards) {
-  return (
-    cards[i - 1]['cards']
-  )
-}
-
 function App() {
   var cards = getCardInfo();
   cards = JSON.parse(cards);
   var stacks = [];
   var updatedCards;
   for (var i = 0; i < cards.length; i++) {
-      stacks.push(<button onClick={() => updatedCards = populateCards(i, cards)}>
+      stacks.push(
         <Stack 
         name = {cards[i]['title']} 
         cards = {cards[i]['cards']}
         />
-      </button>);
+        );
   }
   return <tbody>{stacks}</tbody>;
 }
